@@ -172,6 +172,7 @@ class ManufacturerPartCSVHeaders(CSVHeaders):
 class SellerPartCSVHeaders(CSVHeaders):
     all_headers_defns = [
         CSVHeader('seller', name_options=['part_seller', 'part_seller_name', ]),
+        CSVHeader('seller_link', name_options=['part_seller_link', 'part_seller_url', ]),
         CSVHeader('unit_cost', name_options=['seller_part_unit_cost', 'unit_cost', 'part_cost', ]),
         CSVHeader('minimum_order_quantity', name_options=['minimum_order_quantity', 'moq', 'part_moq', ]),
         CSVHeader('nre_cost', name_options=['part_nre', 'part_nre_cost', 'nre', 'nre_cost', ]),
