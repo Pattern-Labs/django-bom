@@ -266,8 +266,16 @@ def home(request):
             if len(sellerparts) > 0:
                 for sellerpart in part_rev.part.seller_parts():
                     for field_name in seller_csv_headers.get_default_all():
-                        attr = getattr(sellerpart, field_name)
-                        row.update({csv_headers.get_default(field_name): attr if attr is not None else ''})
+                        field_synonyms = seller_csv_headers.get_synoynms(field_name)
+                        found = False
+                        for synonym in field_synonyms:
+                            attr = getattr(sellerpart, synonym, None)
+                            if attr is not None:
+                                found = True
+                                row.update({csv_headers.get_default(field_name): attr if attr is not None else ''})
+                                break
+                        if not found:
+                            row.update({csv_headers.get_default(field_name): ''})
                     writer.writerow({k: smart_str(v) for k, v in row.items()})
             else:
                 writer.writerow({k: smart_str(v) for k, v in row.items()})

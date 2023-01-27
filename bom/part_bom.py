@@ -154,6 +154,7 @@ class PartBomItem(AsDictModel):
             'part_ext_qty': self.extended_quantity,
             'part_order_qty': self.order_quantity,
             'part_seller': self.seller_part.seller.name if self.seller_part is not None else '',
+            'part_seller_link': self.seller_part.link if self.seller_part is not None else '',
             'part_cost': self.seller_part.unit_cost if self.seller_part is not None else '',
             'part_moq': self.seller_part.minimum_order_quantity if self.seller_part is not None else 0,
             'part_nre': self.seller_part.nre_cost if self.seller_part is not None else 0,

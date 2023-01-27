@@ -296,7 +296,7 @@ class SellerPartForm(forms.ModelForm):
         exclude = ['manufacturer_part', 'data_source', ]
 
     new_seller = forms.CharField(max_length=128, label='-or- Create new seller (leave blank if selecting)', required=False)
-    field_order = ['seller', 'new_seller', 'unit_cost', 'nre_cost', 'lead_time_days', 'minimum_order_quantity', 'minimum_pack_quantity', ]
+    field_order = ['seller', 'new_seller', 'seller_part_number', 'unit_cost', 'nre_cost', 'lead_time_days', 'minimum_order_quantity', 'minimum_pack_quantity', ]
 
     def __init__(self, *args, **kwargs):
         self.organization = kwargs.pop('organization', None)

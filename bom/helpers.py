@@ -96,7 +96,8 @@ def create_a_fake_seller_part(
         mpq,
         unit_cost,
         lead_time_days,
-        nre_cost=None):
+        nre_cost=None,
+        seller_part_number=''):
     sp1 = SellerPart(
         seller=seller,
         manufacturer_part=manufacturer_part,
@@ -104,7 +105,8 @@ def create_a_fake_seller_part(
         minimum_pack_quantity=mpq,
         unit_cost=unit_cost,
         lead_time_days=lead_time_days,
-        nre_cost=nre_cost)
+        nre_cost=nre_cost,
+        seller_part_number=seller_part_number)
     sp1.save()
 
     return sp1
@@ -191,12 +193,12 @@ def create_some_fake_parts(organization):
 
     (s1, s2, s3) = create_some_fake_sellers(organization=organization)
 
-    create_a_fake_seller_part(s1, mp1, moq=1, mpq=1, unit_cost=0, lead_time_days=None, nre_cost=0,)
+    create_a_fake_seller_part(s1, mp1, moq=1, mpq=1, unit_cost=0, lead_time_days=None, nre_cost=0, seller_part_number="SKU123")
     create_a_fake_seller_part(s1, mp1, moq=1, mpq=1, unit_cost=1.2, lead_time_days=20, nre_cost=500)
     create_a_fake_seller_part(s2, mp1, moq=1000, mpq=5000, unit_cost=0.1005, lead_time_days=7, nre_cost=0)
-    create_a_fake_seller_part(s2, mp2, moq=200, mpq=200, unit_cost=0.5, lead_time_days=47, nre_cost=1)
+    create_a_fake_seller_part(s2, mp2, moq=200, mpq=200, unit_cost=0.5, lead_time_days=47, nre_cost=1, seller_part_number="SKU123")
     create_a_fake_seller_part(s2, mp2, moq=2000, mpq=200, unit_cost=0.4, lead_time_days=47, nre_cost=10)
-    create_a_fake_seller_part(s1, mp2, moq=2000, mpq=200, unit_cost=0.4, lead_time_days=47, nre_cost=10)
+    create_a_fake_seller_part(s1, mp2, moq=2000, mpq=200, unit_cost=0.4, lead_time_days=47, nre_cost=10, seller_part_number="SKU123")
     create_a_fake_seller_part(s1, mp2, moq=3000, mpq=200, unit_cost=0.3, lead_time_days=47, nre_cost=10)
     return pt1, pt2, pt3, pt4
 
