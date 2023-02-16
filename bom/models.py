@@ -503,7 +503,8 @@ class PartRevision(models.Model):
 
     def indented(self, top_level_quantity=100):
         def indented_given_bom(bom, part_revision, parent_id=None, parent=None, qty=1, parent_qty=1, indent_level=0, subpart=None, reference='', do_not_load=False):
-            bom_item_id = (parent_id or '') + (str(part_revision.id) + '-dnl' if do_not_load else str(part_revision.id))
+            # Create a (unique) item ID, used to relate the part to its parent/children in the indented view
+            bom_item_id = (f"{parent_id}-" if parent_id else '') + (str(part_revision.id) + '-dnl' if do_not_load else str(part_revision.id))
             extended_quantity = parent_qty * qty
             total_extended_quantity = top_level_quantity * extended_quantity
 
