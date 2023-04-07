@@ -721,6 +721,7 @@ class SellerPart(models.Model, AsDictModel):
         d = super().as_dict()
         d['unit_cost'] = self.unit_cost.amount
         d['nre_cost'] = self.nre_cost.amount
+        d['lead_time_weeks'] = ceil(self.lead_time_days / 7)
         return d
 
     def as_dict_for_export(self):
@@ -730,7 +731,9 @@ class SellerPart(models.Model, AsDictModel):
             'seller': self.seller.name,
             'unit_cost': self.unit_cost,
             'minimum_order_quantity': self.minimum_order_quantity,
-            'nre_cost': self.nre_cost
+            'nre_cost': self.nre_cost,
+            'lead_time_days': self.lead_time_days or 0,
+            'lead_time_weeks': ceil(self.lead_time_days / 7) if self.lead_time_days else 0,
         }
 
     @staticmethod

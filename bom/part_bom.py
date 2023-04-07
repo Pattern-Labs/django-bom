@@ -134,12 +134,13 @@ class PartBomItem(AsDictModel):
             logger.log(logging.INFO, '[part_bom.py] ' + str(err))
             return Money(0, self._currency)
 
-    def as_dict(self, include_id=False):
+    def as_dict(self):
         dict = super().as_dict()
         del dict['bom_id']
         return dict
 
     def as_dict_for_export(self):
+        seller_part_dict = self.seller_part.as_dict_for_export() if self.seller_part is not None else {}
         return {
             'part_number': self.part.full_part_number(),
             'quantity': self.quantity,
@@ -153,14 +154,9 @@ class PartBomItem(AsDictModel):
             'part_manufacturer_part_number': self.part.primary_manufacturer_part.manufacturer_part_number if self.part.primary_manufacturer_part is not None else '',
             'part_ext_qty': self.extended_quantity,
             'part_order_qty': self.order_quantity,
-            'part_seller': self.seller_part.seller.name if self.seller_part is not None else '',
-            'part_cost': self.seller_part.unit_cost if self.seller_part is not None else '',
-            'part_moq': self.seller_part.minimum_order_quantity if self.seller_part is not None else 0,
-            'part_nre': self.seller_part.nre_cost if self.seller_part is not None else 0,
             'part_ext_cost': self.extended_cost(),
             'part_out_of_pocket_cost': self.out_of_pocket_cost(),
-            'part_lead_time_days': self.seller_part.lead_time_days if self.seller_part is not None else 0,
-        }
+        } | seller_part_dict
 
     def manufacturer_parts_for_export(self):
         return [mp.as_dict_for_export() for mp in self.part.manufacturer_parts(exclude_primary=True)]

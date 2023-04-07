@@ -288,7 +288,7 @@ fabric.properties
 .env
 
 # virtualenv
-venv/
+*venv/
 ENV/
 
 *local_setting.py
