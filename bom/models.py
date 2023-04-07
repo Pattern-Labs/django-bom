@@ -733,8 +733,8 @@ class SellerPart(models.Model, AsDictModel):
             'seller_link': self.link,
             'minimum_order_quantity': self.minimum_order_quantity,
             'nre_cost': self.nre_cost,
-            'lead_time_days': self.lead_time_days or 0,
-            'lead_time_weeks': ceil(self.lead_time_days / 7) if self.lead_time_days else 0,
+            'lead_time_days': self.lead_time_days,
+            'lead_time_weeks': ceil(self.lead_time_days / 7) if self.lead_time_days else None
         }
 
     @staticmethod

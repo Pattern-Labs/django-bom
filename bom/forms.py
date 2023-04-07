@@ -302,7 +302,7 @@ class SellerPartForm(forms.ModelForm):
         self.organization = kwargs.pop('organization', None)
         self.manufacturer_part = kwargs.pop('manufacturer_part', None)
         self.base_fields['unit_cost'] = forms.DecimalField(required=True, decimal_places=4, max_digits=17)
-        self.base_fields['nre_cost'] = forms.DecimalField(required=False, decimal_places=4, max_digits=17, label='NRE cost', initial=0.0)
+        self.base_fields['nre_cost'] = forms.DecimalField(required=True, decimal_places=4, max_digits=17, label='NRE cost', initial=0.0)
 
         instance = kwargs.get('instance')
         if instance:

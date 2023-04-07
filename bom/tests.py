@@ -19,7 +19,7 @@ from .helpers import (
     create_some_fake_parts,
     create_user_and_organization,
 )
-from .models import Manufacturer, ManufacturerPart, Part, PartClass, PartRevision, Seller, Subpart
+from .models import Part, PartClass, Seller, Subpart
 
 
 TEST_FILES_DIR = "bom/test_files"
