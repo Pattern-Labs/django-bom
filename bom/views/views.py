@@ -796,7 +796,7 @@ def part_info(request, part_id, part_revision_id=None):
 
 
 @login_required(login_url=BOM_LOGIN_URL)
-def part_export_bom(request, part_id=None, part_revision_id=None, flat=False, sourcing=False, sourcing_detailed=False):
+def part_export_bom(request, part_id=None, part_revision_id=None, flat=False):
     user = request.user
     profile = user.bom_profile()
     organization = profile.organization
@@ -847,18 +847,6 @@ def part_export_bom(request, part_id=None, part_revision_id=None, flat=False, so
         for kx, vx in raw_row.items():
             if csv_headers.get_default(kx) is None: print ("NONE", kx)
             mapped_row.update({csv_headers.get_default(kx): vx})
-
-        if sourcing_detailed:
-            for idx, sp in enumerate(item.seller_parts_for_export()):
-                if f'{ManufacturerPartCSVHeaders.all_headers_defns[0]}_{idx + 1}' not in csv_headers_raw:
-                    csv_headers_raw.extend([f'{h}_{idx + 1}' for h in ManufacturerPartCSVHeaders.all_headers_defns])
-                    csv_headers_raw.extend([f'{h}_{idx + 1}' for h in SellerPartCSVHeaders.all_headers_defns])
-                mapped_row.update({f'{k}_{idx + 1}': smart_str(v) for k, v in sp.items()})
-        elif sourcing:
-            for idx, mp in enumerate(item.manufacturer_parts_for_export()):
-                if f'{ManufacturerPartCSVHeaders.all_headers_defns[0]}_{idx + 1}' not in csv_headers_raw:
-                    csv_headers_raw.extend([f'{h}_{idx + 1}' for h in ManufacturerPartCSVHeaders.all_headers_defns])
-                mapped_row.update({f'{k}_{idx + 1}': smart_str(v) for k, v in mp.items()})
 
         csv_rows.append(mapped_row)
 

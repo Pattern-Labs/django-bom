@@ -34,8 +34,6 @@ bom_patterns = [
     path('upload-bom/', views.upload_bom, name='upload-bom'),
     path('part/<int:part_id>/', views.part_info, name='part-info'),
     path('part/<int:part_id>/export/', views.part_export_bom, name='part-export-bom'),
-    path('part/<int:part_id>/export-sourcing/', views.part_export_bom, name='part-export-bom-sourcing', kwargs={'sourcing': True}),
-    path('part/<int:part_id>/export-sourcing-detailed/', views.part_export_bom, name='part-export-bom-sourcing-detailed', kwargs={'sourcing_detailed': True}),
     path('part/<int:part_id>/upload/', views.part_upload_bom, name='part-upload-bom'),
     path('part/<int:part_id>/edit/', views.part_edit, name='part-edit'),
     path('part/<int:part_id>/delete/', views.part_delete, name='part-delete'),
@@ -53,8 +51,6 @@ bom_patterns = [
     path('part/<int:part_id>/rev/<int:part_revision_id>/add-subpart/', views.add_subpart, name='part-add-subpart'),
 
     path('part-rev/<int:part_revision_id>/export/', views.part_export_bom, name='part-revision-export-bom'),
-    path('part-rev/<int:part_revision_id>/export-sourcing/', views.part_export_bom, name='part-revision-export-bom-sourcing', kwargs={'sourcing': True}),
-    path('part-rev/<int:part_revision_id>/export-sourcing-detailed/', views.part_export_bom, name='part-revision-export-bom-sourcing-detailed', kwargs={'sourcing_detailed': True}),
     path('part-rev/<int:part_revision_id>/export-flat/', views.part_export_bom, name='part-revision-export-bom-flat', kwargs={'flat': True}),
     path('part-rev/<int:part_revision_id>/export-flat-sourcing/', views.part_export_bom, name='part-revision-export-bom-flat-sourcing', kwargs={'flat': True, 'sourcing': True}),
     path('part-rev/<int:part_revision_id>/export-flat-sourcing-detailed/', views.part_export_bom, name='part-revision-export-bom-flat-sourcing-detailed', kwargs={'flat': True, 'sourcing_detailed': True}),
