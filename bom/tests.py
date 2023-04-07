@@ -1,5 +1,5 @@
 import csv
-from re import finditer, search
+from re import finditer
 from unittest import skip
 
 from django.conf import settings
@@ -17,10 +17,9 @@ from .helpers import (
     create_some_fake_manufacturers,
     create_some_fake_part_classes,
     create_some_fake_parts,
-    create_some_fake_sellers,
     create_user_and_organization,
 )
-from .models import ManufacturerPart, Part, PartClass, Seller, SellerPart, Subpart
+from .models import Manufacturer, ManufacturerPart, Part, PartClass, PartRevision, Seller, Subpart
 
 
 TEST_FILES_DIR = "bom/test_files"
@@ -522,6 +521,22 @@ class TestBOM(TransactionTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue('error' in str(response.content))
         self.assertTrue('already in use' in str(response.content))
+
+    def test_unique_indented_part_ids(self):
+        org = self.organization
+        pc = PartClass(code=1, name="CoolName", organization=org)
+        pc.save()
+        p = Part(number_item=('A' * org.number_item_len), organization=org, number_class=pc)
+        p.save()
+        m = Manufacturer(name="MyMan", organization=org)
+        m.save()
+        mp = ManufacturerPart(part=p, manufacturer=m, manufacturer_part_number="A1234321")
+        mp.save()
+        p.primary_manufacturer_part = mp
+        p.save()
+        pr = PartRevision(part=p, revision="1")
+        pr.save()
+        print(pr)
 
     def test_create_part_no_manufacturer_part(self):
         (p1, p2, p3, p4) = create_some_fake_parts(organization=self.organization)
