@@ -90,7 +90,7 @@ class PartBom(AsDictModel):
             return mps
         return [item.part.manufacturer_part for item in self.parts]
 
-    def as_dict(self, include_id=False):
+    def as_dict(self):
         d = super().as_dict()
         d['unit_cost'] = self.unit_cost.amount
         d['nre'] = self.nre_cost.amount

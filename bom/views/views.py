@@ -3,6 +3,7 @@ import logging
 import operator
 from functools import reduce
 from json import dumps
+from typing import List
 
 from django.conf import settings
 from django.contrib import messages
@@ -27,7 +28,6 @@ import bom.constants as constants
 from bom.csv_headers import (
     BOMFlatCSVHeaders,
     BOMIndentedCSVHeaders,
-    ManufacturerPartCSVHeaders,
     PartClassesCSVHeaders,
     SellerPartCSVHeaders,
 )
@@ -78,7 +78,7 @@ from bom.utils import check_references_for_duplicates, listify_string, prep_for_
 logger = logging.getLogger(__name__)
 BOM_LOGIN_URL = getattr(settings, "BOM_LOGIN_URL", None) or settings.LOGIN_URL
 
-def form_error_messages(form_errors) -> [str]:
+def form_error_messages(form_errors) -> List[str]:
     error_messages = []
     for k, errors in form_errors.as_data().items():
         for error_message in errors:
@@ -845,7 +845,7 @@ def part_export_bom(request, part_id=None, part_revision_id=None, flat=False):
         mapped_row = {}
         raw_row = {k: smart_str(v) for k, v in item.as_dict_for_export().items()}
         for kx, vx in raw_row.items():
-            if csv_headers.get_default(kx) is None: print ("NONE", kx)
+            if csv_headers.get_default(kx) is None: print("NONE", kx)
             mapped_row.update({csv_headers.get_default(kx): vx})
 
         csv_rows.append(mapped_row)

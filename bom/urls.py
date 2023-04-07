@@ -52,8 +52,6 @@ bom_patterns = [
 
     path('part-rev/<int:part_revision_id>/export/', views.part_export_bom, name='part-revision-export-bom'),
     path('part-rev/<int:part_revision_id>/export-flat/', views.part_export_bom, name='part-revision-export-bom-flat', kwargs={'flat': True}),
-    path('part-rev/<int:part_revision_id>/export-flat-sourcing/', views.part_export_bom, name='part-revision-export-bom-flat-sourcing', kwargs={'flat': True, 'sourcing': True}),
-    path('part-rev/<int:part_revision_id>/export-flat-sourcing-detailed/', views.part_export_bom, name='part-revision-export-bom-flat-sourcing-detailed', kwargs={'flat': True, 'sourcing_detailed': True}),
 
     path('sellerpart/<int:sellerpart_id>/edit/', views.sellerpart_edit, name='sellerpart-edit'),
     path('sellerpart/<int:sellerpart_id>/delete/', views.sellerpart_delete, name='sellerpart-delete'),
