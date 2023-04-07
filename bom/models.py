@@ -721,7 +721,7 @@ class SellerPart(models.Model, AsDictModel):
         d = super().as_dict()
         d['unit_cost'] = self.unit_cost.amount
         d['nre_cost'] = self.nre_cost.amount
-        d['lead_time_weeks'] = ceil(self.lead_time_days / 7)
+        d['lead_time_weeks'] = ceil(self.lead_time_days / 7) if self.lead_time_days else None
         return d
 
     def as_dict_for_export(self):

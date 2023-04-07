@@ -837,10 +837,10 @@ def part_export_bom(request, part_id=None, part_revision_id=None, flat=False):
             bom = part_revision.indented(top_level_quantity=qty)
     except (RuntimeError, RecursionError):
         messages.error(request, "Error: infinite recursion in part relationship. Contact info@indabom.com to resolve.")
-        bom = []
+        return response
     except AttributeError as err:
         messages.error(request, err)
-        bom = []
+        return response
 
     if flat:
         csv_headers = BOMFlatCSVHeaders()

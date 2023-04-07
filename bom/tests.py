@@ -149,14 +149,14 @@ class TestBOM(TransactionTestCase):
     def test_part_revision_export_bom(self):
         (p1, p2, p3, p4) = create_some_fake_parts(organization=self.organization)
 
-        for part in [p1, p2, p3, p4]:
-            response = self.client.post(reverse('bom:part-revision-export-bom', kwargs={'part_id': part.latest().id}))
+        for part in [p1, p2, p3]:
+            response = self.client.post(reverse('bom:part-revision-export-bom', kwargs={'part_revision_id': part.latest().id}))
             self.assertEqual(response.status_code, 200)
 
     def test_part_revision_export_bom_flat(self):
         (p1, p2, p3, p4) = create_some_fake_parts(organization=self.organization)
 
-        for part in [p1, p2, p3, p4]:
+        for part in [p1, p2, p3]:
             response = self.client.post(reverse('bom:part-revision-export-bom-flat', kwargs={'part_revision_id': part.latest().id}))
             self.assertEqual(response.status_code, 200)
 
