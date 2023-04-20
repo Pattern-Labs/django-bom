@@ -5,7 +5,6 @@ from math import ceil
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group
 from django.core.cache import cache
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -722,6 +721,7 @@ class SellerPart(models.Model, AsDictModel):
         d = super().as_dict()
         d['unit_cost'] = self.unit_cost.amount
         d['nre_cost'] = self.nre_cost.amount
+        d['lead_time_weeks'] = ceil(self.lead_time_days / 7) if self.lead_time_days else None
         return d
 
     def as_dict_for_export(self):
@@ -732,7 +732,9 @@ class SellerPart(models.Model, AsDictModel):
             'unit_cost': self.unit_cost,
             'seller_link': self.link,
             'minimum_order_quantity': self.minimum_order_quantity,
-            'nre_cost': self.nre_cost
+            'nre_cost': self.nre_cost,
+            'lead_time_days': self.lead_time_days,
+            'lead_time_weeks': ceil(self.lead_time_days / 7) if self.lead_time_days else None
         }
 
     @staticmethod

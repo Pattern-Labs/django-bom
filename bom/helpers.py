@@ -1,7 +1,6 @@
 from bom import constants
 from bom.models import (
     Assembly,
-    AssemblySubparts,
     Manufacturer,
     ManufacturerPart,
     Organization,

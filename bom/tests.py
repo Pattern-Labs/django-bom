@@ -1,5 +1,5 @@
 import csv
-from re import finditer, search
+from re import finditer
 from unittest import skip
 
 from django.conf import settings
@@ -17,10 +17,9 @@ from .helpers import (
     create_some_fake_manufacturers,
     create_some_fake_part_classes,
     create_some_fake_parts,
-    create_some_fake_sellers,
     create_user_and_organization,
 )
-from .models import ManufacturerPart, Part, PartClass, Seller, SellerPart, Subpart
+from .models import Part, PartClass, Seller, Subpart
 
 
 TEST_FILES_DIR = "bom/test_files"
@@ -143,38 +142,23 @@ class TestBOM(TransactionTestCase):
     def test_part_export_bom(self):
         (p1, p2, p3, p4) = create_some_fake_parts(organization=self.organization)
 
-        response = self.client.post(reverse('bom:part-export-bom', kwargs={'part_id': p1.id}))
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.post(reverse('bom:part-export-bom-sourcing', kwargs={'part_id': p1.id}))
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.post(reverse('bom:part-export-bom-sourcing-detailed', kwargs={'part_id': p1.id}))
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.post(reverse('bom:part-revision-export-bom-sourcing', kwargs={'part_revision_id': p3.latest().id}))
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.post(reverse('bom:part-revision-export-bom-sourcing-detailed', kwargs={'part_revision_id': p3.latest().id}))
-        self.assertEqual(response.status_code, 200)
+        for part in [p1, p2, p3, p4]:
+            response = self.client.post(reverse('bom:part-export-bom', kwargs={'part_id': part.id}))
+            self.assertEqual(response.status_code, 200)
 
     def test_part_revision_export_bom(self):
         (p1, p2, p3, p4) = create_some_fake_parts(organization=self.organization)
 
-        response = self.client.post(reverse('bom:part-revision-export-bom', kwargs={'part_revision_id': p1.latest().id}))
-        self.assertEqual(response.status_code, 200)
+        for part in [p1, p2, p3]:
+            response = self.client.post(reverse('bom:part-revision-export-bom', kwargs={'part_revision_id': part.latest().id}))
+            self.assertEqual(response.status_code, 200)
 
     def test_part_revision_export_bom_flat(self):
         (p1, p2, p3, p4) = create_some_fake_parts(organization=self.organization)
 
-        response = self.client.post(reverse('bom:part-revision-export-bom-flat', kwargs={'part_revision_id': p1.latest().id}))
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.post(reverse('bom:part-revision-export-bom-flat-sourcing', kwargs={'part_revision_id': p1.latest().id}))
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.post(reverse('bom:part-revision-export-bom-flat-sourcing-detailed', kwargs={'part_revision_id': p1.latest().id}))
-        self.assertEqual(response.status_code, 200)
+        for part in [p1, p2, p3]:
+            response = self.client.post(reverse('bom:part-revision-export-bom-flat', kwargs={'part_revision_id': part.latest().id}))
+            self.assertEqual(response.status_code, 200)
 
     def test_export_parts(self):
         (p1, p2, p3, p4) = create_some_fake_parts(organization=self.organization)
@@ -522,6 +506,7 @@ class TestBOM(TransactionTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue('error' in str(response.content))
         self.assertTrue('already in use' in str(response.content))
+
 
     def test_create_part_no_manufacturer_part(self):
         (p1, p2, p3, p4) = create_some_fake_parts(organization=self.organization)

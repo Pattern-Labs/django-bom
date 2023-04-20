@@ -178,6 +178,7 @@ class SellerPartCSVHeaders(CSVHeaders):
         CSVHeader('nre_cost', name_options=['part_nre', 'part_nre_cost', 'nre', 'nre_cost', ]),
         CSVHeader('minimum_pack_quantity', name_options=['minimum_pack_quantity', 'mpq', 'part_mpq' ]),
         CSVHeader('lead_time_days', name_options=['lead_time_days', 'lead_time', 'lt']),
+        CSVHeader('lead_time_weeks', name_options=['lead_time_weeks', 'lead_time', 'ltw']),
     ]
 
 
@@ -267,6 +268,7 @@ class BOMFlatCSVHeaders(CSVHeaders):
         CSVHeader('order_qty', name_options=['part_order_qty', 'part_order_quantity', 'order_quantity', ]),
         CSVHeader('out_of_pocket_cost', name_options=['part_out_of_pocket_cost', 'cost', ]),
         CSVHeader('lead_time_days', name_options=['part_lead_time_days', ]),
+        CSVHeader('lead_time_weeks', name_options=['part_lead_time_weeks', ]),
     ]
 
 

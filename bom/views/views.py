@@ -3,6 +3,7 @@ import logging
 import operator
 from functools import reduce
 from json import dumps
+from typing import List
 
 from django.conf import settings
 from django.contrib import messages
@@ -27,7 +28,6 @@ import bom.constants as constants
 from bom.csv_headers import (
     BOMFlatCSVHeaders,
     BOMIndentedCSVHeaders,
-    ManufacturerPartCSVHeaders,
     PartClassesCSVHeaders,
     SellerPartCSVHeaders,
 )
@@ -78,7 +78,7 @@ from bom.utils import check_references_for_duplicates, listify_string, prep_for_
 logger = logging.getLogger(__name__)
 BOM_LOGIN_URL = getattr(settings, "BOM_LOGIN_URL", None) or settings.LOGIN_URL
 
-def form_error_messages(form_errors) -> [str]:
+def form_error_messages(form_errors) -> List[str]:
     error_messages = []
     for k, errors in form_errors.as_data().items():
         for error_message in errors:
@@ -804,7 +804,7 @@ def part_info(request, part_id, part_revision_id=None):
 
 
 @login_required(login_url=BOM_LOGIN_URL)
-def part_export_bom(request, part_id=None, part_revision_id=None, flat=False, sourcing=False, sourcing_detailed=False):
+def part_export_bom(request, part_id=None, part_revision_id=None, flat=False):
     user = request.user
     profile = user.bom_profile()
     organization = profile.organization
@@ -837,10 +837,10 @@ def part_export_bom(request, part_id=None, part_revision_id=None, flat=False, so
             bom = part_revision.indented(top_level_quantity=qty)
     except (RuntimeError, RecursionError):
         messages.error(request, "Error: infinite recursion in part relationship. Contact info@indabom.com to resolve.")
-        bom = []
+        return response
     except AttributeError as err:
         messages.error(request, err)
-        bom = []
+        return response
 
     if flat:
         csv_headers = BOMFlatCSVHeaders()
@@ -853,20 +853,8 @@ def part_export_bom(request, part_id=None, part_revision_id=None, flat=False, so
         mapped_row = {}
         raw_row = {k: smart_str(v) for k, v in item.as_dict_for_export().items()}
         for kx, vx in raw_row.items():
-            if csv_headers.get_default(kx) is None: print ("NONE", kx)
+            if csv_headers.get_default(kx) is None: print("NONE", kx)
             mapped_row.update({csv_headers.get_default(kx): vx})
-
-        if sourcing_detailed:
-            for idx, sp in enumerate(item.seller_parts_for_export()):
-                if f'{ManufacturerPartCSVHeaders.all_headers_defns[0]}_{idx + 1}' not in csv_headers_raw:
-                    csv_headers_raw.extend([f'{h}_{idx + 1}' for h in ManufacturerPartCSVHeaders.all_headers_defns])
-                    csv_headers_raw.extend([f'{h}_{idx + 1}' for h in SellerPartCSVHeaders.all_headers_defns])
-                mapped_row.update({f'{k}_{idx + 1}': smart_str(v) for k, v in sp.items()})
-        elif sourcing:
-            for idx, mp in enumerate(item.manufacturer_parts_for_export()):
-                if f'{ManufacturerPartCSVHeaders.all_headers_defns[0]}_{idx + 1}' not in csv_headers_raw:
-                    csv_headers_raw.extend([f'{h}_{idx + 1}' for h in ManufacturerPartCSVHeaders.all_headers_defns])
-                mapped_row.update({f'{k}_{idx + 1}': smart_str(v) for k, v in mp.items()})
 
         csv_rows.append(mapped_row)
 
